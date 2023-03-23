@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<script>
+  function copyAndSend(){
+    var content = document.getElementById("content").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', './paste', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(content);
+    alert('sent');
+  }
+</script>
+<textarea
+    style="border: 1px solid #000;width: 90%;margin: 10px"
+    name="content"
+    id="content"
+    rows="10" >
+</textarea>
+<input type="submit" onclick="copyAndSend()"/>
+</body>
+</html>
