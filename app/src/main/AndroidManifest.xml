@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HackServer"
+        android:name=".application.HackApplication"
         tools:targetApi="31">
         <meta-data android:name="io.sentry.auto-init" android:value="false" />
         <meta-data android:name="io.sentry.dsn" android:value="https://ce4c2b526032420d83391c16267cf752@ahs-sentry.aihuishou.com/49" />

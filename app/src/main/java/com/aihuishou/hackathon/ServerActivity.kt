@@ -9,14 +9,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.MutableLiveData
-import com.aihuishou.hackathon.util.Constants
 import com.aihuishou.hackathon.util.NetUtil
 import com.yanzhenjie.andserver.AndServer
 import com.yanzhenjie.andserver.Server
@@ -44,12 +42,11 @@ class ServerActivity: ComponentActivity() {
             Sentry.captureException(e)
         }
 
-        readAssets()
         initServer()
         setContent {
             ServerContent()
         }
-        EventBus.getDefault().register(this)
+        //EventBus.getDefault().register(this)
     }
 
     override fun onDestroy() {
@@ -81,19 +78,6 @@ class ServerActivity: ComponentActivity() {
             })
             .build()
         mServer?.startup()
-    }
-
-    private fun readAssets() {
-        var jsContent = ""
-        try {
-            val inputStream = assets.open("home.html")
-            inputStream.bufferedReader().useLines { lines ->
-                jsContent = lines.joinToString(separator="")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        Constants.HOME_PAGE_HTML = jsContent
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

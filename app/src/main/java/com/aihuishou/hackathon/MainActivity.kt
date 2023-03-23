@@ -116,10 +116,10 @@ class MainActivity : ComponentActivity() {
         val value = isEnabledLiveData.observeAsState()
         Text(text = "Hello $name!, ${value.value}",
             modifier = Modifier.clickable{
-//                val intent = Intent(this, ServerActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, ServerActivity::class.java)
+                startActivity(intent)
 
-                toGrantPermission()
+//                toGrantPermission()
             })
     }
 
