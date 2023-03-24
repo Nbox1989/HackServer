@@ -35,13 +35,6 @@ class ServerActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        try {
-            throw Exception("This is a test.")
-        } catch (e: Exception) {
-            Sentry.captureMessage("test again", SentryLevel.FATAL)
-            Sentry.captureException(e)
-        }
-
         initServer()
         setContent {
             ServerContent()

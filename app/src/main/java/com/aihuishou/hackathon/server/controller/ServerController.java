@@ -13,6 +13,7 @@ import com.yanzhenjie.andserver.util.MediaType;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -73,26 +74,12 @@ public class ServerController {
     public String getCurPathNodes() {
         Activity activity = ActivityUtils.getTopActivity();
         String html = readFromAsset("activity.html");
-        String replaced = html.replace("[ACTIVITY_NAME]", activity.getClass().getName());
-        Field[] fields = activity.getClass().getFields();
-        List<String> strList = new ArrayList<>();
-        for (Field field : fields) {
-            try {
-                String fieldName = field.getName();
-                if(!Modifier.isStatic(field.getModifiers())) {
-                    String className = field.get(activity).getClass().getSimpleName();
-                    strList.add(fieldName + ":" + className);
-                }
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        for (String s : strList) {
-            sb.append("<div>").append(s).append("</div>");
-        }
+        return html.replace("[ACTIVITY_NAME]", activity.getClass().getName());
+    }
 
-        return replaced.replace("[ACTIVITY_FIELDS]", sb.toString());
+    @GetMapping(path = "/activity/fields")
+    public String getActivityFields(@QueryParam("path") String path) {
+        return new ActivityFieldsFunc().getFieldsString(path);
     }
 
     private String readFromAsset(String assetFileName) {
@@ -104,5 +91,17 @@ public class ServerController {
             e.printStackTrace();
         }
         return jsContent;
+    }
+
+    @GetMapping(path = "/files/internal", produces = MediaType.TEXT_HTML_VALUE)
+    public String getExternalFiles() {
+        File filesDir = HackApplication.instance.getDataDir();
+        String html = readFromAsset("files.html");
+        return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
+    }
+
+    @GetMapping(path = "/files/list")
+    public String listFiles(@QueryParam("path") String path) {
+        return new FileListFunc().getFilesString(path);
     }
 }

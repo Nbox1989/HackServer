@@ -7,18 +7,24 @@
 
 <body>
 <script>
-  function copyAndSend(){
-    var content = document.getElementById("content").value;
+  function queryFields(e, path){
     var xhr = new XMLHttpRequest();
-    xhr.open('post', './paste', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(content);
-    alert('sent');
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState ==4 && xhr.status == 200) {
+            document.getElementById(path).innerHTML = xhr.responseText;
+        }
+    };
+    xhr.open('get', './fields?path=' + path, true);
+    xhr.send();
+    e.stopPropagation();
+  }
+  function testClick(){
+    alert('onclick');
   }
 </script>
 <div>
-    <h1>当前的activity是[ACTIVITY_NAME]</h1>
+    <h1 onclick="queryFields(event, '/')">当前的activity是[ACTIVITY_NAME]</h1>
 </div>
-<div>[ACTIVITY_FIELDS]</div>
+<div id="/"></div>
 </body>
 </html>

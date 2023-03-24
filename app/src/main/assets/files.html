@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<script>
+  function queryFields(path){
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState ==4 && xhr.status == 200) {
+            document.getElementById('fileList').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.open('get', './list?path=' + path, true);
+    xhr.send();
+  }
+</script>
+<div><h1 onclick="queryFields('1')"> 根目录位置：[ROOT_FILE_PATH]</h1></div>
+<div id="path"></div>
+<div id="fileList"></div>
+</body>
+</html>
