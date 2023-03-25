@@ -1,25 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-</head>
 
-<body>
-<script>
-  function queryFields(path){
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState ==4 && xhr.status == 200) {
-            document.getElementById('fileList').innerHTML = xhr.responseText;
+    <style type="text/css">
+        #rootPath{
+            font-size:30px;
+            color: red;
+            font-style:bold;
         }
-    };
-    xhr.open('get', './list?path=' + path, true);
-    xhr.send();
-  }
-</script>
-<div><h1 onclick="queryFields('1')"> 根目录位置：[ROOT_FILE_PATH]</h1></div>
-<div id="path"></div>
-<div id="fileList"></div>
+        #relativePath{
+            font-size:25px;
+            color: blue;
+            font-style:bold;
+        }
+    </style>
+    <script>
+      function listFiles(path){
+        currentPath = path;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                let relativePathDom = document.getElementById('relativePath');
+                relativePathDom.innerHTML="";
+                var array = path.split("/");
+                var curPath = "";
+                for(let i=0;i<array.length;i++){
+                    if(array[i] != "") {
+                        let text = document.createTextNode(array[i]);
+                        let span = document.createElement("span");
+                        span.innerText = "/" + array[i];
+                        curPath += "/" + array[i];
+                        let clickPath = curPath;
+                        span.addEventListener('click', function(){
+                            listFiles(clickPath);
+                        });
+                        relativePathDom.appendChild(span);
+                    }
+                }
+                document.getElementById('fileList').innerHTML = xhr.responseText;
+            }
+        };
+        var rootPath = document.getElementById('rootPath').innerText;
+        xhr.open('get', './list?root='+ rootPath +'&path=' + path, true);
+        xhr.send();
+      }
+
+      function openFolder(folderName) {
+          var relativePath = "";
+          var children = document.getElementById("relativePath").children;
+          for(let i=0;i<children.length;i++){
+             relativePath += children[i].innerText;
+          }
+          relativePath += "/" + folderName;
+          listFiles(relativePath);
+      }
+    </script>
+
+    <script type='text/javascript'>
+        window.onload = function () {
+            listFiles('');
+        }
+    </script>
+</head>
+<body>
+    <div><h1 onclick="listFiles('')"> 根目录位置：<span id="rootPath">[ROOT_FILE_PATH]</span></h1></div>
+    <div><h2>相对路径：<span id="relativePath"></span></h2></div>
+    </br>
+    <div id="fileList"></div>
 </body>
 </html>

@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.aihuishou.hackathon"
         minSdk 26
-        targetSdk 31
+        targetSdk 28
         versionCode 5218
         versionName "6.5.2"
 
@@ -68,6 +68,5 @@ dependencies {
     implementation 'com.yanzhenjie.andserver:api:2.1.10'
     annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.10'
     implementation "org.greenrobot:eventbus:3.1.1"
-    implementation 'io.sentry:sentry-android:6.3.0'
     implementation 'com.blankj:utilcodex:1.31.1'
 }

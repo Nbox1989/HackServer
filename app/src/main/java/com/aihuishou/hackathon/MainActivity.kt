@@ -1,15 +1,12 @@
 package com.aihuishou.hackathon
 
-import android.app.NotificationManager
-import android.content.Context
+import android.Manifest
 import android.content.Intent
-import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -21,45 +18,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.aihuishou.hackathon.ui.theme.HackServerTheme
 import com.aihuishou.hackathon.util.NotificationUtil
-import io.sentry.*
-import io.sentry.SentryOptions.BeforeSendCallback
-import io.sentry.android.core.SentryAndroid
-import io.sentry.android.core.SentryAndroidOptions
-import java.lang.reflect.Method
 
 class MainActivity : ComponentActivity() {
 
     private val isEnabledLiveData = MutableLiveData<Boolean>()
 
+    private var resumeFlag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val sentryDsn = "https://ce4c2b526032420d83391c16267cf752@ahs-sentry.aihuishou.com/49"
-//        SentryAndroid.init(context, options -> {
-//            options.setDsn(sentryDsn);
-//            options.setEnvironment(AppUtils.isAppDebug()?"debug":"release");
-//        });
-
-        //        SentryAndroid.init(context, options -> {
-//            options.setDsn(sentryDsn);
-//            options.setEnvironment(AppUtils.isAppDebug()?"debug":"release");
-//        });
-        SentryAndroid.init(this) {
-            it.setDsn(sentryDsn)
-            it.setDebug(true)
-            it.cacheDirPath = externalCacheDir?.absolutePath ?: cacheDir.absolutePath // 默认就是cacheDir，即data\data\包名\cache
-            it.environment = "test" // 环境标识，如生产环境、测试环境，随便自定义字符串
-            it.beforeSend = SentryOptions.BeforeSendCallback { event, hint ->
-                // BeforeSendCallback主要就是上传前的拦截器，比如设置debug数据不上报等，具体看需求
-                return@BeforeSendCallback if (event.level == SentryLevel.DEBUG) null else event
-            }
-
-        }
-
 
 
         setContent {
@@ -73,13 +45,32 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        requestPermission()
     }
 
     override fun onResume() {
         super.onResume()
         isEnabledLiveData.value = NotificationUtil.isNotifyEnabled(this)
+        if(!resumeFlag) {
+            val intent = Intent(this, ServerActivity::class.java)
+            startActivity(intent)
+            resumeFlag = true
+        }
     }
 
+    private fun requestPermission() {
+        val permissions = Array(1) {
+            when(it) {
+                0 -> Manifest.permission.WRITE_EXTERNAL_STORAGE
+                else -> ""
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(this, permissions[0])
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissions, 1);
+        }
+    }
 
     private fun toGrantPermission() {
         val localIntent = Intent()

@@ -18,8 +18,6 @@ import androidx.lifecycle.MutableLiveData
 import com.aihuishou.hackathon.util.NetUtil
 import com.yanzhenjie.andserver.AndServer
 import com.yanzhenjie.andserver.Server
-import io.sentry.Sentry
-import io.sentry.SentryLevel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

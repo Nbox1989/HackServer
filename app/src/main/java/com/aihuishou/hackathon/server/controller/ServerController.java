@@ -1,6 +1,7 @@
 package com.aihuishou.hackathon.server.controller;
 
 import android.app.Activity;
+import android.os.Environment;
 
 import com.aihuishou.hackathon.PasteEvent;
 import com.aihuishou.hackathon.application.HackApplication;
@@ -82,6 +83,11 @@ public class ServerController {
         return new ActivityFieldsFunc().getFieldsString(path);
     }
 
+    @GetMapping(path = "/test", produces = MediaType.TEXT_HTML_VALUE)
+    public String getTestPage() {
+        return readFromAsset("test.html");
+    }
+
     private String readFromAsset(String assetFileName) {
         String jsContent = "";
         try {
@@ -93,15 +99,34 @@ public class ServerController {
         return jsContent;
     }
 
+    @GetMapping(path = "/files", produces = MediaType.TEXT_HTML_VALUE)
+    public String getEnumFileDirs() {
+        return readFromAsset("enum_file_dir.html");
+    }
+
     @GetMapping(path = "/files/internal", produces = MediaType.TEXT_HTML_VALUE)
-    public String getExternalFiles() {
+    public String getInternalFiles() {
         File filesDir = HackApplication.instance.getDataDir();
         String html = readFromAsset("files.html");
         return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
     }
 
+    @GetMapping(path = "/files/external", produces = MediaType.TEXT_HTML_VALUE)
+    public String getExternalFiles() {
+        File filesDir = HackApplication.instance.getExternalCacheDir().getParentFile();
+        String html = readFromAsset("files.html");
+        return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
+    }
+
+    @GetMapping(path = "/files/sdcard", produces = MediaType.TEXT_HTML_VALUE)
+    public String getSdcardFiles() {
+        File filesDir = Environment.getExternalStorageDirectory();
+        String html = readFromAsset("files.html");
+        return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
+    }
+
     @GetMapping(path = "/files/list")
-    public String listFiles(@QueryParam("path") String path) {
-        return new FileListFunc().getFilesString(path);
+    public String listFiles(@QueryParam("root") String root, @QueryParam(value = "path", required = false) String path) {
+        return new FileListFunc().getFilesString(root, path);
     }
 }
