@@ -7,19 +7,19 @@ import com.aihuishou.hackathon.PasteEvent;
 import com.aihuishou.hackathon.application.HackApplication;
 import com.aihuishou.hackathon.util.InputReader;
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.ReflectUtils;
 import com.yanzhenjie.andserver.annotation.*;
+import com.yanzhenjie.andserver.framework.body.FileBody;
+import com.yanzhenjie.andserver.http.HttpRequest;
+import com.yanzhenjie.andserver.http.HttpResponse;
+import com.yanzhenjie.andserver.http.multipart.MultipartFile;
 import com.yanzhenjie.andserver.util.MediaType;
+import com.yanzhenjie.andserver.http.ResponseBody;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class ServerController {
@@ -128,5 +128,24 @@ public class ServerController {
     @GetMapping(path = "/files/list")
     public String listFiles(@QueryParam("root") String root, @QueryParam(value = "path", required = false) String path) {
         return new FileListFunc().getFilesString(root, path);
+    }
+
+    @GetMapping(path = "/files/download")
+    public ResponseBody downloadFile(HttpResponse response, @QueryParam(name = "filePath") String filePath){
+        File file= new File(filePath);
+        FileBody body= new FileBody(file);
+        response.setHeader("Content-Disposition", "attachment;fileName="+file.getName());
+        return body;
+    }
+
+    @PostMapping(path = "/files/upload")
+    public String uploadFile(HttpRequest request, HttpResponse response, @RequestParam(name = "file") MultipartFile file, @RequestParam(name = "toFolder") String folder) {
+        try {
+            File uploadFile = new File(folder);//FileUtils.createUploadFile(file);
+            file.transferTo(uploadFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "文件上传成功！";
     }
 }

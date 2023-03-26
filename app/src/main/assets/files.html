@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -56,6 +56,52 @@
           relativePath += "/" + folderName;
           listFiles(relativePath);
       }
+
+      function uploadFile(){
+        var rootPath = document.getElementById('rootPath').innerText;
+        var relativePath = window.currentPath;
+
+        var fileObj = document.getElementById("f1").files[0];
+        var url =  "./upload";
+
+        var form = new FormData();
+        form.append("file", fileObj);
+        form.append("toFolder", rootPath + relativePath + "/" + fileObj.name);
+
+        xhr = new XMLHttpRequest();
+        xhr.open("post", url, true);
+
+        xhr.onload = function() {
+            alert("上传完成！");
+        };
+
+        xhr.onerror = function() {
+            alert("上传失败！");
+        };
+
+        xhr.send(form);
+      }
+
+      function createFolder(){
+        var folderName = document.getElementById('folder').value;
+        if(folderName == ""){
+            alert("请输入文件夹名");
+            return;
+        }
+        xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                alert(xhr.responseText);
+            }
+        };
+        var rootPath = document.getElementById('rootPath').innerText;
+        var relativePath = window.currentPath;
+
+        var folder = rootPath + relativePath + "/" + folderName;
+        xhr.open("get", "./create?folder="+ folder, true);
+        xhr.send();
+      }
     </script>
 
     <script type='text/javascript'>
@@ -67,6 +113,13 @@
 <body>
     <div><h1 onclick="listFiles('')"> 根目录位置：<span id="rootPath">[ROOT_FILE_PATH]</span></h1></div>
     <div><h2>相对路径：<span id="relativePath"></span></h2></div>
+    </br>
+    <input type="file" id="f1"/>
+    <input type="button" value="上传" onclick="uploadFile()"/>
+    </br>
+    </br>
+    <div><input type="text" id="folder"/>
+        <input type="button" value="创建文件夹" onclick="createFolder()"/></div>
     </br>
     <div id="fileList"></div>
 </body>
