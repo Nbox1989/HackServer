@@ -1,8 +1,7 @@
-package com.aihuishou.hackathon.server.controller
+package com.aihuishou.hackathon.server.func
 
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ReflectUtils
-import java.io.File
 import java.lang.reflect.Modifier
 
 class ActivityFieldsFunc {

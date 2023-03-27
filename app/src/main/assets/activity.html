@@ -2,26 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Activity</title>
+
+    <script>
+    function queryFields(e, path){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                document.getElementById(path).innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open('get', './activity/fields?path=' + path, true);
+        xhr.send();
+        if(e!= null){
+            e.stopPropagation();
+        }
+    }
+    function testClick(){
+        alert('onclick');
+    }
+    </script>
+        <script type='text/javascript'>
+        window.onload = function () {
+            queryFields(null, '/');
+        }
+    </script>
 </head>
 
 <body>
-<script>
-  function queryFields(e, path){
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState ==4 && xhr.status == 200) {
-            document.getElementById(path).innerHTML = xhr.responseText;
-        }
-    };
-    xhr.open('get', './fields?path=' + path, true);
-    xhr.send();
-    e.stopPropagation();
-  }
-  function testClick(){
-    alert('onclick');
-  }
-</script>
 <div>
     <h1 onclick="queryFields(event, '/')">当前的activity是[ACTIVITY_NAME]</h1>
 </div>

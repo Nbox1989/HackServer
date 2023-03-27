@@ -1,27 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home</title>
 </head>
-
 <body>
-<script>
-  function copyAndSend(){
-    var content = document.getElementById("content").value;
-    var xhr = new XMLHttpRequest();
-    xhr.open('post', './paste', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(content);
-    alert('sent');
-  }
-</script>
-<textarea
-    style="border: 1px solid #000;width: 90%;margin: 10px"
-    name="content"
-    id="content"
-    rows="10" >
-</textarea>
-<input type="submit" onclick="copyAndSend()"/>
+    <div><a href="./test" target="_blank">测试页面</a></div>
+    <div><a href="./clipboard" target="_blank">剪切板</a></div>
+    <div><a href="./activity" target="_blank">Activity</a></div>
+    <div><a href="./files" target="_blank">文件</a></div>
 </body>
 </html>

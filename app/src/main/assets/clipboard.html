@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Clipboard</title>
+
+    <script>
+    function copyAndSend(){
+        var content = document.getElementById("content").value;
+        if(content == '') {
+            alert("请输入内容");
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', './clipboard/copy', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    alert("ok");
+                    getMobileContent();
+                }
+            };
+            xhr.send(content);
+        }
+    }
+
+    function getMobileContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', './clipboard/content', true);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                document.getElementById('clipContent').innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send(content);
+    }
+
+    function clearClipContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', './clipboard/clear', true);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                alert("cleared");
+                getMobileContent();
+            }
+        };
+        xhr.send(content);
+    }
+    </script>
+
+    <script type='text/javascript'>
+    window.onload = function () {
+       getMobileContent();
+    }
+    </script>
+</head>
+
+<body>
+    <textarea
+        style="border: 1px solid #000;width: 90%;margin: 10px"
+        name="content"
+        id="content"
+        rows="10" >
+    </textarea>
+    </br>
+    <input type="submit" onclick="copyAndSend()"/>
+    <div>手机剪切板的内容是：<span id="clipContent"></span><input style="margin-left:20px" type="button" onclick="clearClipContent()" value = "清除"/></div>
+</body>
+</html>
