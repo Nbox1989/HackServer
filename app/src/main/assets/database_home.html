@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Files</title>
+
+    <style type="text/css">
+        #rootPath{
+            font-size:30px;
+            color: red;
+            font-style:bold;
+        }
+        #relativePath{
+            font-size:25px;
+            color: blue;
+            font-style:bold;
+        }
+    </style>
+    <script>
+    function queryHomePath(){
+        currentPath = path;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            document.getElementById('db_home_name').innerText=xhr.responseText;
+        };
+        xhr.open('get', './database/home/folder", true);
+        xhr.send();
+    }
+    function listFiles(){
+        currentPath = path;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            document.getElementById('db_files').innerHTML=xhr.responseText;
+        };
+        xhr.open('get', './database/home/list", true);
+        xhr.send();
+    }
+    </script>
+
+    <script type='text/javascript'>
+        window.onload = function () {
+            queryHomePath()
+            listFiles();
+        }
+    </script>
+</head>
+<body>
+    <div><h1>数据库根目录：</h1><span id="db_home_name"></span></div>
+    <div>数据库文件：</div>
+    <div id="db_files"></div>
+</body>
+</html>
