@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables</title>
+
+    <style type="text/css">
+        #rootPath{
+            font-size:30px;
+            color: red;
+            font-style:bold;
+        }
+        #relativePath{
+            font-size:25px;
+            color: blue;
+            font-style:bold;
+        }
+    </style>
+    <script>
+        function queryTables(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                document.getElementById('tables').innerHTML=xhr.responseText;
+            };
+            var path = '/data/user/0/com.aihuishou.hackathon/databases/ua.db';
+            xhr.open('get', './tables?path='+ path, true);
+            xhr.send();
+        }
+
+        function listFiles(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                document.getElementById('db_files').innerHTML=xhr.responseText;
+            };
+            xhr.open('get', './database/home/list', true);
+            xhr.send();
+        }
+
+    </script>
+
+    <script type='text/javascript'>
+        window.onload = function () {
+            queryTables();
+
+        }
+    </script>
+</head>
+<body>
+    <div><h1 id="db_home_name">查看数据库信息：</h1></div>
+    <div>数据库路径：<span id="file_path"></span></span></div>
+    <div id="tables"></div>
+</body>
+</html>
