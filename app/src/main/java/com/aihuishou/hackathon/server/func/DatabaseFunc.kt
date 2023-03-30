@@ -41,7 +41,7 @@ object DatabaseFunc {
     fun listDbTables(dbPath: String): String {
         val dbManager = DatabaseManager(dbPath)
         return dbManager.queryAllTableNames().joinToString("") {
-            "<div>${it}</div>"
+            "<option value=\"${it}\">${it}</option>"
         }
     }
 

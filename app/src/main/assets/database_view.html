@@ -17,6 +17,12 @@
         }
     </style>
     <script>
+        function initEvents(){
+            document.getElementById('tables').addEventListener('change', function(event) {
+                queryColumns();
+            });
+        }
+
         function queryTables(){
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
@@ -27,27 +33,46 @@
             xhr.send();
         }
 
-        function listFiles(){
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function(){
-                document.getElementById('db_files').innerHTML=xhr.responseText;
-            };
-            xhr.open('get', './database/home/list', true);
-            xhr.send();
+        function queryColumns() {
+
+        }
+
+        function setupParams() {
+            var url = window.location.href;
+            var queryString = url.split("?")[1];
+
+            if (queryString) {
+              var queryParams = queryString.split("&");
+
+              var paramsObj = {};
+              queryParams.forEach(function(param) {
+                var keyValue = param.split("=");
+                paramsObj[keyValue[0]] = decodeURIComponent(keyValue[1]);
+              });
+
+              databasePath = paramsObj.path;
+            }
         }
 
     </script>
 
     <script type='text/javascript'>
         window.onload = function () {
+            setupParams();
+            initEvents();
             queryTables();
-
         }
     </script>
 </head>
 <body>
     <div><h1 id="db_home_name">查看数据库信息：</h1></div>
     <div>数据库路径：<span id="file_path"></span></span></div>
-    <div id="tables"></div>
+    <div>表：</div>
+    <select id="tables">
+        <option value="apple">苹果</option>
+        <option value="banana">香蕉</option>
+        <option value="orange">橙子</option>
+        <option value="grape">葡萄</option>
+    </select>
 </body>
 </html>

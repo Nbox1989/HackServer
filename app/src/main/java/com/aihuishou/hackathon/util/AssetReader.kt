@@ -9,7 +9,7 @@ object AssetReader {
         var jsContent = ""
         try {
             inputStream.bufferedReader().useLines { lines ->
-                jsContent = lines.joinToString(separator="")
+                jsContent = lines.joinToString(separator="\n")
             }
         } catch (e: Exception) {
             e.printStackTrace()

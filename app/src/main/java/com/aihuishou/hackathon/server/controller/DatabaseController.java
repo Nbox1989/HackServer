@@ -43,8 +43,7 @@ public class DatabaseController {
 
     @GetMapping(path = "/database/tables")
     public String queryDbTables(@QueryParam("path") String path) {
-//        return DatabaseFunc.listDbTables(path);
-        return DatabaseFunc.listDbTableColumns(path, "sqlite_sequence");
+        return DatabaseFunc.listDbTables(path);
     }
 
     @GetMapping(path = "/database/columns")
