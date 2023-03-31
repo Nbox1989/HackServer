@@ -49,7 +49,25 @@ object DatabaseFunc {
     fun listDbTableColumns(dbPath: String, tableName: String): String {
         val dbManager = DatabaseManager(dbPath)
         return dbManager.queryTableColumns(tableName).joinToString("") {
-            "<div>${it}</div>"
+            "<th>$it</th>"
         }
+    }
+
+    @JvmStatic
+    fun listDbTableRecords(dbPath: String, tableName: String): String {
+        val dbManager = DatabaseManager(dbPath)
+        return dbManager.queryTableRecords(tableName).joinToString ("") { rowRecord ->
+            createTableRowTag(rowRecord)
+        }
+    }
+
+    private fun createTableRowTag(rowRecord: List<String>): String {
+        val sb = StringBuilder("<tr>")
+        rowRecord.forEachIndexed { index, s ->
+            val color = if(index % 2==0) "white" else "silver"
+            sb.append("<td style=\"background-color: $color;\">$s</td>" )
+        }
+        sb.append("</tr>")
+        return sb.toString()
     }
 }

@@ -13,6 +13,7 @@ import com.yanzhenjie.andserver.annotation.RestController;
 import com.yanzhenjie.andserver.util.MediaType;
 
 import java.io.File;
+import java.util.List;
 
 @RestController
 public class DatabaseController {
@@ -49,5 +50,10 @@ public class DatabaseController {
     @GetMapping(path = "/database/columns")
     public String queryDbTables(@QueryParam("path") String path, @QueryParam("table") String table) {
         return DatabaseFunc.listDbTableColumns(path, table);
+    }
+
+    @GetMapping(path = "/database/records")
+    public String queryDbRecords(@QueryParam("path") String path, @QueryParam("table") String table) {
+        return DatabaseFunc.listDbTableRecords(path, table);
     }
 }

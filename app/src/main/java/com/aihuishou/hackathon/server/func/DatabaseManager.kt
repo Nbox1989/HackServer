@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 
 
-class DatabaseManager(private val dbFilePath: String) {
+class DatabaseManager(dbFilePath: String) {
     private val mContext: Context? = null
     private var mDB: SQLiteDatabase = SQLiteDatabase.openDatabase(dbFilePath, null, SQLiteDatabase.OPEN_READWRITE)
 
@@ -30,13 +30,34 @@ class DatabaseManager(private val dbFilePath: String) {
             val sql = "PRAGMA table_info($tableName)"
             val cursor = mDB.rawQuery(sql, null)
             while (cursor.moveToNext()) {
-                columnNames.add(cursor.getString(0))
+                cursor.getColumnIndex("name").takeIf { it >= 0 }?.let { columnIndex ->
+                    columnNames.add(cursor.getString(columnIndex))
+                }
             }
             cursor.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return columnNames
+    }
+
+    fun queryTableRecords(tableName: String): List<List<String>> {
+        val records = arrayListOf<List<String>>()
+        try {
+            val sql = "select * from $tableName"
+            val cursor = mDB.rawQuery(sql, null)
+            while (cursor.moveToNext()) {
+                val rowRecord = arrayListOf<String>()
+                for(i in 0 until cursor.columnCount) {
+                    rowRecord.add(cursor.getString(i)?:"[null]")
+                }
+                records.add(rowRecord)
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return records
     }
 
     /**
