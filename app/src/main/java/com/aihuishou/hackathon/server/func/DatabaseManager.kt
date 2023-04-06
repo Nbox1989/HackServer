@@ -60,6 +60,22 @@ class DatabaseManager(dbFilePath: String) {
         return records
     }
 
+    fun queryTableRecordCount(tableName: String): Long {
+        var recordCount = 0L
+        try {
+            val sql = "select count(*) from $tableName"
+            val cursor = mDB.rawQuery(sql, null)
+            while (cursor.moveToNext()) {
+                recordCount = cursor.getLong(0)
+                break
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return recordCount
+    }
+
     /**
     //查询选择题
     fun queryUser(): List<User>? {

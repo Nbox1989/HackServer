@@ -70,4 +70,10 @@ object DatabaseFunc {
         sb.append("</tr>")
         return sb.toString()
     }
+
+    @JvmStatic
+    fun queryDbTableRecordCount(dbPath: String, tableName: String): String {
+        val dbManager = DatabaseManager(dbPath)
+        return dbManager.queryTableRecordCount(tableName).toString()
+    }
 }

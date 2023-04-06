@@ -2,6 +2,7 @@ package com.aihuishou.hackathon.server.func
 
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ReflectUtils
+import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
 class ActivityFieldsFunc {
@@ -19,11 +20,12 @@ class ActivityFieldsFunc {
 
         val sb = StringBuilder()
         if(any != null) {
-            val fields = any.javaClass.fields
+            val fields = getAllFieldsIncludeSuperClasses(any)
             for (field in fields) {
                 try {
                     val fieldName = field.name
                     if (!Modifier.isStatic(field.modifiers)) {
+                        field.isAccessible = true
                         val className = field[any].javaClass.simpleName
                         val value = field.get(any)?.toString()
                         val text = "$fieldName :$className($value)"
@@ -42,4 +44,14 @@ class ActivityFieldsFunc {
         return sb.toString()
     }
 
+
+    private fun getAllFieldsIncludeSuperClasses(any: Any) : List<Field> {
+        val ret = arrayListOf<Field>()
+        var tempClass = any.javaClass
+        while(tempClass != null && !tempClass.getName().toLowerCase().equals("java.lang.object")) {
+            ret.addAll(tempClass.declaredFields)
+            tempClass = tempClass.superclass
+        }
+        return ret
+    }
 }

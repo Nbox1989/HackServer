@@ -56,4 +56,9 @@ public class DatabaseController {
     public String queryDbRecords(@QueryParam("path") String path, @QueryParam("table") String table) {
         return DatabaseFunc.listDbTableRecords(path, table);
     }
+
+    @GetMapping(path = "/database/recordCount")
+    public String queryDbTableRecordCount(@QueryParam("path") String path, @QueryParam("table") String table) {
+        return DatabaseFunc.queryDbTableRecordCount(path, table);
+    }
 }
