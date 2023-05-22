@@ -1,10 +1,10 @@
-package com.aihuishou.hackathon.server.controller;
+package com.aihuishou.hackserver.core.controller;
 
 import android.os.Environment;
 
-import com.aihuishou.hackathon.application.HackApplication;
-import com.aihuishou.hackathon.server.func.FileListFunc;
-import com.aihuishou.hackathon.util.AssetReader;
+import com.aihuishou.hackserver.core.HackServer;
+import com.aihuishou.hackserver.core.func.FileListFunc;
+import com.aihuishou.hackserver.core.utils.AssetReader;
 import com.yanzhenjie.andserver.annotation.GetMapping;
 import com.yanzhenjie.andserver.annotation.PostMapping;
 import com.yanzhenjie.andserver.annotation.QueryParam;
@@ -29,14 +29,20 @@ public class FileController {
 
     @GetMapping(path = "/files/internal", produces = MediaType.TEXT_HTML_VALUE)
     public String getInternalFiles() {
-        File filesDir = HackApplication.instance.getDataDir();
+        if(HackServer.coreApplication == null) {
+            return "";
+        }
+        File filesDir = Environment.getExternalStorageDirectory();
         String html = AssetReader.readFromAsset("files.html");
         return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
     }
 
     @GetMapping(path = "/files/external", produces = MediaType.TEXT_HTML_VALUE)
     public String getExternalFiles() {
-        File filesDir = HackApplication.instance.getExternalCacheDir().getParentFile();
+        if(HackServer.coreApplication == null) {
+            return "";
+        }
+        File filesDir = HackServer.coreApplication.getExternalCacheDir().getParentFile();
         String html = AssetReader.readFromAsset("files.html");
         return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
     }

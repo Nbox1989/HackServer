@@ -1,11 +1,15 @@
-package com.aihuishou.hackathon.server.controller;
+package com.aihuishou.hackserver.core.controller;
 
-import com.aihuishou.hackathon.PasteEvent;
-import com.aihuishou.hackathon.util.AssetReader;
-import com.yanzhenjie.andserver.annotation.*;
+import com.aihuishou.hackserver.core.utils.AssetReader;
+import com.yanzhenjie.andserver.annotation.GetMapping;
+import com.yanzhenjie.andserver.annotation.PathVariable;
+import com.yanzhenjie.andserver.annotation.PostMapping;
+import com.yanzhenjie.andserver.annotation.QueryParam;
+import com.yanzhenjie.andserver.annotation.RequestBody;
+import com.yanzhenjie.andserver.annotation.RequestParam;
+import com.yanzhenjie.andserver.annotation.RestController;
 import com.yanzhenjie.andserver.util.MediaType;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 @RestController

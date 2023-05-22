@@ -1,6 +1,7 @@
 package com.aihuishou.hackathon.application
 
 import android.app.Application
+import com.aihuishou.hackserver.core.HackServer
 
 class HackApplication: Application() {
 
@@ -11,5 +12,6 @@ class HackApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        HackServer.init(this)
     }
 }

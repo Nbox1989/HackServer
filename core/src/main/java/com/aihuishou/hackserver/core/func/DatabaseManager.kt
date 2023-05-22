@@ -1,4 +1,4 @@
-package com.aihuishou.hackathon.server.func
+package com.aihuishou.hackserver.core.func
 
 
 import android.content.Context

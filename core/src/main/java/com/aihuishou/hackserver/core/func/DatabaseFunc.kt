@@ -1,9 +1,8 @@
-package com.aihuishou.hackathon.server.func
+package com.aihuishou.hackserver.core.func
 
-import com.aihuishou.hackathon.application.HackApplication
+import com.aihuishou.hackserver.core.HackServer
 import com.blankj.utilcode.util.ConvertUtils
 import java.io.File
-import java.io.FileFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -11,7 +10,10 @@ object DatabaseFunc {
 
     @JvmStatic
     fun listDbHomeFiles(): String {
-        val filesDir = HackApplication.instance.getDatabasePath("1").parentFile
+        if(HackServer.coreApplication == null) {
+            return ""
+        }
+        val filesDir = HackServer.coreApplication!!.getDatabasePath("1").parentFile
         val dbFiles = filesDir?.listFiles { pathname -> pathname?.isFile == true && pathname.name.endsWith(".db") }
 
         return if(dbFiles.isNullOrEmpty()) {

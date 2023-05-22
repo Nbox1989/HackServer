@@ -1,9 +1,9 @@
-package com.aihuishou.hackathon.server.controller;
+package com.aihuishou.hackserver.core.controller;
 
 import android.app.Activity;
 
-import com.aihuishou.hackathon.server.func.ActivityFieldsFunc;
-import com.aihuishou.hackathon.util.AssetReader;
+import com.aihuishou.hackserver.core.func.ActivityFieldsFunc;
+import com.aihuishou.hackserver.core.utils.AssetReader;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.yanzhenjie.andserver.annotation.GetMapping;
 import com.yanzhenjie.andserver.annotation.QueryParam;

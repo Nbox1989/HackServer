@@ -1,19 +1,14 @@
-package com.aihuishou.hackathon.server.controller;
+package com.aihuishou.hackserver.core.controller;
 
-import android.app.Activity;
-
-import com.aihuishou.hackathon.application.HackApplication;
-import com.aihuishou.hackathon.server.func.ActivityFieldsFunc;
-import com.aihuishou.hackathon.server.func.DatabaseFunc;
-import com.aihuishou.hackathon.util.AssetReader;
-import com.blankj.utilcode.util.ActivityUtils;
+import com.aihuishou.hackserver.core.HackServer;
+import com.aihuishou.hackserver.core.func.DatabaseFunc;
+import com.aihuishou.hackserver.core.utils.AssetReader;
 import com.yanzhenjie.andserver.annotation.GetMapping;
 import com.yanzhenjie.andserver.annotation.QueryParam;
 import com.yanzhenjie.andserver.annotation.RestController;
 import com.yanzhenjie.andserver.util.MediaType;
 
 import java.io.File;
-import java.util.List;
 
 @RestController
 public class DatabaseController {
@@ -24,7 +19,10 @@ public class DatabaseController {
 
     @GetMapping(path = "/database/home/folder")
     public String getHomeFolder() {
-        File filesDir = HackApplication.instance.getDatabasePath("1").getParentFile();
+        if(HackServer.coreApplication == null) {
+            return "";
+        }
+        File filesDir = HackServer.coreApplication.getDatabasePath("1").getParentFile();
         if(filesDir == null) {
             return "";
         } else{

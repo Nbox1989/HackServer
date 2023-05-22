@@ -1,8 +1,8 @@
-package com.aihuishou.hackathon.server.controller;
+package com.aihuishou.hackserver.core.controller;
 
 import android.text.TextUtils;
 
-import com.aihuishou.hackathon.util.AssetReader;
+import com.aihuishou.hackserver.core.utils.AssetReader;
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yanzhenjie.andserver.annotation.GetMapping;

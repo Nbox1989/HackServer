@@ -1,4 +1,4 @@
-package com.aihuishou.hackathon.server.func
+package com.aihuishou.hackserver.core.func
 
 import com.blankj.utilcode.util.ConvertUtils
 import java.io.File
