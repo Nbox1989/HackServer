@@ -6,7 +6,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -23,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.aihuishou.hackathon.ui.theme.HackServerTheme
 import com.aihuishou.hackathon.util.NotificationUtil
+import java.util.*
 
 class MainActivity : ComponentActivity() {
 
@@ -46,6 +50,17 @@ class MainActivity : ComponentActivity() {
             }
         }
         requestPermission()
+
+        Timer().schedule(
+            object : TimerTask() {
+                override fun run() {
+                    Log.i("nbox", System.currentTimeMillis().toString())
+                }
+            },
+            100,
+            100
+        )
+
     }
 
     override fun onResume() {

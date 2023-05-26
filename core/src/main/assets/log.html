@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Log Home</title>
+    <script>
+
+        function queryStatus(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    var logPath = xhr.responseText
+                    if(logPath.length == 0) {
+                        document.getElementById("logPage").innerHTML =
+                            '<div><input type="button" onclick="startLogcat()" value = "开启日志"/></div>'
+                    } else {
+                        document.getElementById("logPage").innerHTML =
+                            '<div><span id="logOff"></span><input type="button" onclick="stopLogcat()" value = "关闭日志"/></div>' +
+                            '<div>📃<b>' + logPath + '</b>  <a target="blank" href="./files/view?filePath=' + logPath + '">查看</a>'
+
+                    }
+                }
+            }
+            xhr.open('get', './log/status', true);
+            xhr.send();
+        }
+
+        function startLogcat(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    if(xhr.responseText.length > 0){
+                        var logPath = xhr.responseText
+                        document.getElementById("logPage").innerHTML =
+                            '<div><span id="logOff"></span><input type="button" onclick="stopLogcat()" value = "关闭日志"/></div>' +
+                            '<div>📃<b>' + logPath + '</b>  <a target="blank" href="./files/view?filePath=' + logPath + '">查看</a>'
+                    } else {
+                        alert("开启失败");
+                    }
+                }
+            };
+            xhr.open('get', './log/on', true);
+            xhr.send();
+        }
+
+        function stopLogcat(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    document.getElementById("logPage").innerHTML = xhr.responseText
+                }
+            };
+            xhr.open('get', './log/off', true);
+            xhr.send();
+        }
+
+        window.onload = function () {
+            queryStatus();
+        }
+    </script>
+</head>
+<body>
+    <div id="logPage" style="margin-left:20px; margin-top:20px;">
+
+    </div>
+</body>
+</html>

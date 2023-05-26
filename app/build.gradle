@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.yanzhenjie.andserver'
 }
 
 android {
@@ -65,10 +64,9 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    implementation 'com.yanzhenjie.andserver:api:2.1.10'
-//    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.10'
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation 'com.blankj:utilcodex:1.31.1'
 
     implementation project(":core")
+//    implementation project(":core-no-opt")
 }

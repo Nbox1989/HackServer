@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.aihuishou.hackserver.core.HackServer;
 import com.aihuishou.hackserver.core.func.FileListFunc;
 import com.aihuishou.hackserver.core.utils.AssetReader;
+import com.aihuishou.hackserver.core.utils.InputReader;
 import com.yanzhenjie.andserver.annotation.GetMapping;
 import com.yanzhenjie.andserver.annotation.PostMapping;
 import com.yanzhenjie.andserver.annotation.QueryParam;
@@ -32,7 +33,7 @@ public class FileController {
         if(HackServer.coreApplication == null) {
             return "";
         }
-        File filesDir = Environment.getExternalStorageDirectory();
+        File filesDir = HackServer.coreApplication.getFilesDir().getParentFile();
         String html = AssetReader.readFromAsset("files.html");
         return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
     }
@@ -65,6 +66,14 @@ public class FileController {
         FileBody body= new FileBody(file);
         response.setHeader("Content-Disposition", "attachment;fileName="+file.getName());
         return body;
+    }
+
+    @GetMapping(path = "/files/view", produces = MediaType.TEXT_HTML_VALUE)
+    public String viewFile(HttpResponse response, @QueryParam(name = "filePath") String filePath){
+        File file = new File(filePath);
+        return "<html><body><pre>" + InputReader.readFormFile(file) + "</pre></body></html>";
+
+
     }
 
     @PostMapping(path = "/files/upload")

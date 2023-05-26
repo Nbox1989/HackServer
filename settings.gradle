@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "HackServer"
 include ':app'
 include ':core'
+include ':core-no-opt'

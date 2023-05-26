@@ -55,10 +55,32 @@ class FileListFunc {
         val size = ConvertUtils.byte2FitMemorySize(file.length(), 1)
         val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
             .format(Date(file.lastModified()))
-        return "<div>$icon <b>$name</b> <span style=\"color:blue\">$size</span> <span style=\"color:grey\">$time</span>  <a target=\"blank\" href=\"${createDownloadRef(file)}\">下载</a></div>"
+        val txtFile = file.isTextFile()
+        return "<div>$icon <b>$name</b> <span style=\"color:blue\">$size</span> <span style=\"color:grey\">$time</span>  <a target=\"blank\" href=\"${createDownloadRef(file)}\">下载</a>" +
+                if(txtFile) "  <a target=\"blank\" href=\"${createViewRef(file)}\">查看</a>" else "" +
+                "</div>"
     }
 
     private fun createDownloadRef(file: File): String{
         return "./download?filePath=${file.absolutePath}"
     }
+
+    private fun createViewRef(file: File): String{
+        return "./view?filePath=${file.absolutePath}"
+    }
+}
+
+private fun File.isTextFile(): Boolean {
+    return this.name.endsWith("txt") ||
+        this.name.endsWith("xml") ||
+        this.name.endsWith("md") ||
+        this.name.endsWith("json") ||
+        this.name.endsWith("html") ||
+        this.name.endsWith("rtf") ||
+        this.name.endsWith("log") ||
+        this.name.endsWith("ini") ||
+        this.name.endsWith("conf") ||
+        this.name.endsWith("yml") ||
+        this.name.endsWith("yaml") ||
+        this.name.endsWith("sh")
 }
