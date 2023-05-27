@@ -21,21 +21,21 @@ class ActivityFieldsFunc {
         val sb = StringBuilder()
         if(any != null) {
             val fields = getAllFieldsIncludeSuperClasses(any)
-            for (field in fields) {
+//            for (field in fields) {
+            val filteredFields = fields.filter { !Modifier.isStatic(it.modifiers) }
+            filteredFields.forEachIndexed { index, field ->
                 try {
                     val fieldName = field.name
-                    if (!Modifier.isStatic(field.modifiers)) {
-                        field.isAccessible = true
-                        val className = field[any].javaClass.simpleName
-                        val value = field.get(any)?.toString()
-                        val text = "$fieldName :$className($value)"
-                        val id: String = pathArray.joinToString(separator) + separator + fieldName
-                        sb.append("<div style = \"margin-left: 20px\" " +
-                                "onclick = \"queryFields(event, '$id')\">")
-                            .append("👉🏻 $text")
-                            .append("<div id = \"$id\"> </div>")
-                            .append("</div>")
-                    }
+                    field.isAccessible = true
+                    val className = field[any].javaClass.simpleName
+                    val value = field.get(any)?.toString()
+                    val text = "$fieldName :$className($value)"
+                    val id: String = pathArray.joinToString(separator) + separator + fieldName
+                    sb.append("<div style = \"margin-left: 20px\" " +
+                            "onclick = \"queryFields(event, '$id')\">")
+                        .append(if(index == filteredFields.size - 1) "┗ $text" else "┣ $text")
+                        .append("<div id = \"$id\"> </div>")
+                        .append("</div>")
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

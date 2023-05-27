@@ -6,14 +6,23 @@
 
     <script>
     function queryFields(e, path){
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState ==4 && xhr.status == 200) {
-                document.getElementById(path).innerHTML = xhr.responseText;
-            }
-        };
-        xhr.open('get', './activity/fields?path=' + path, true);
-        xhr.send();
+        if(document.getElementById(path).innerHTML.trim() != '') {
+            document.getElementById(path).innerHTML = ''
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    if(xhr.responseText == '') {
+                        document.getElementById(path).innerText.replace(/^. {1}/, "┣");
+                    } else {
+                        document.getElementById(path).innerText.replace(/^. {1}/, "┗");
+                    }
+                    document.getElementById(path).innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open('get', './activity/fields?path=' + path, true);
+            xhr.send();
+        }
         if(e!= null){
             e.stopPropagation();
         }
@@ -31,7 +40,8 @@
 
 <body>
 <div>
-    <h1 onclick="queryFields(event, '/')">当前的activity是[ACTIVITY_NAME]</h1>
+    <h1>Inspet Current Activity</h1>
+    <div onclick="queryFields(event, '/')" style = "font-size:32px">[ACTIVITY_NAME]</div>
 </div>
 <div id="/"></div>
 </body>
