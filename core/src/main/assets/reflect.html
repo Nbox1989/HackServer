@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables</title>
+
+    <script>
+        function executeReflection() {
+            var jsonInput = document.getElementById('jsonInput').value
+            if(jsonInput.trim() == '') {
+                alert("请输入json");
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', './reflect/request', true);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    document.getElementById('result').innerText = xhr.responseText
+                }
+            };
+            xhr.send(jsonInput);
+        }
+
+    </script>
+</head>
+<body>
+<div><h1 id="db_home_name">通过反射获取应用内部数据：</h1></div>
+<div>
+        <textarea id="jsonInput"
+                  style="border: 1px solid #000;width: 90%;margin: 10px"
+                  name="content"
+                  rows="50"
+                  placeholder="请输入对应格式的json"></textarea>
+</div>
+<div><input type="button" onclick="executeReflection()" value = "执行"/></div>
+<br>
+<div id="result"></div>
+</body>
+</html>
