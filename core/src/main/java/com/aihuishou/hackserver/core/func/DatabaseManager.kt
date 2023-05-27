@@ -3,6 +3,7 @@ package com.aihuishou.hackserver.core.func
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import java.sql.SQLException
 
 
 class DatabaseManager(dbFilePath: String) {
@@ -76,6 +77,15 @@ class DatabaseManager(dbFilePath: String) {
         return recordCount
     }
 
+
+    fun execute(sql: String): String {
+        try {
+            mDB.execSQL(sql)
+        } catch (e: Exception) {
+            return "出错啦： ${e.message}"
+        }
+        return ""
+    }
     /**
     //查询选择题
     fun queryUser(): List<User>? {

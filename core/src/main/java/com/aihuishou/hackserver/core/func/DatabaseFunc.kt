@@ -78,4 +78,10 @@ object DatabaseFunc {
         val dbManager = DatabaseManager(dbPath)
         return dbManager.queryTableRecordCount(tableName).toString()
     }
+
+    @JvmStatic
+    fun executeSql(dbPath: String, sql: String): String {
+        val dbManager = DatabaseManager(dbPath)
+        return dbManager.execute(sql)
+    }
 }

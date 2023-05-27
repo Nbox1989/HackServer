@@ -59,4 +59,9 @@ public class DatabaseController {
     public String queryDbTableRecordCount(@QueryParam("path") String path, @QueryParam("table") String table) {
         return DatabaseFunc.queryDbTableRecordCount(path, table);
     }
+
+    @GetMapping(path = "/database/execute")
+    public String executeRawSql(@QueryParam("path") String path, @QueryParam("sql") String sql) {
+        return DatabaseFunc.executeSql(path, sql);
+    }
 }

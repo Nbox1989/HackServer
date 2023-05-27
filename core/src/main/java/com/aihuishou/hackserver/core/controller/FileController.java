@@ -23,7 +23,7 @@ import java.io.File;
 @RestController
 public class FileController {
 
-    @GetMapping(path = "/files", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping(path = "/files/", produces = MediaType.TEXT_HTML_VALUE)
     public String getEnumFileDirs() {
         return AssetReader.readFromAsset("files_home.html");
     }

@@ -20,7 +20,9 @@
     function queryHomePath(){
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function(){
-            document.getElementById('db_home_name').innerText="数据库根目录：" + xhr.responseText;
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                document.getElementById('db_home_name').innerText="数据库根目录：" + xhr.responseText;
+            }
         };
         xhr.open('get', './database/home/folder', true);
         xhr.send();
@@ -28,7 +30,9 @@
     function listFiles(){
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function(){
-            document.getElementById('db_files').innerHTML=xhr.responseText;
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                document.getElementById('db_files').innerHTML=xhr.responseText;
+            }
         };
         xhr.open('get', './database/home/list', true);
         xhr.send();

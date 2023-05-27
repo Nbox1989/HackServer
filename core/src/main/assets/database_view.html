@@ -26,14 +26,16 @@
         function initEvents(){
             document.getElementById('tables').addEventListener('change', function(event) {
                 queryColumns(this.value);
-                queryPageCounts(this.value);
+<!--                queryPageCounts(this.value);-->
             });
         }
 
         function queryTables(){
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
-                document.getElementById('tables').innerHTML=xhr.responseText;
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    document.getElementById('tables').innerHTML=xhr.responseText;
+                }
             };
             xhr.open('get', './tables?path='+ window.databasePath, true);
             xhr.send();
@@ -42,10 +44,12 @@
         function queryColumns(tableName) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
-                var columns = xhr.responseText;
-                var columnsTr = document.getElementById('columns');
-                columnsTr.innerHTML=columns;
-                queryRecords(tableName)
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    var columns = xhr.responseText;
+                    var columnsTr = document.getElementById('columns');
+                    columnsTr.innerHTML=columns;
+                    queryRecords(tableName)
+                }
             };
             xhr.open('get', './columns?path='+ window.databasePath + '&table='+tableName, true);
             xhr.send();
@@ -54,7 +58,9 @@
         function queryRecords(tableName){
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
-                document.getElementById('records').innerHTML=xhr.responseText;
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    document.getElementById('records').innerHTML=xhr.responseText;
+                }
             };
             xhr.open('get', './records?path='+ window.databasePath + '&table='+tableName, true);
             xhr.send();
@@ -65,25 +71,47 @@
 
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
-                var pagesDom = document.getElementById('pages')
-                pagesDom.innerHTML="";
-                var count = xhr.responseText;
-                for(var i =0; i< count; i++) {
-                    let text = document.createTextNode(i);
-                    let span = document.createElement("span");
-                    span.setAttribute("class","pageIndex")
-                    span.innerText = i + 1;
-                    span.style.border = "1px solid grey"
-                    span.style.width = "20px"
-                    span.style.float = "left"
-                    span.style.textAlign = "center"
-                    span.addEventListener('click', function(){
-                        alert(span.innerText);
-                    });
-                    pagesDom.appendChild(span);
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    pagesDom.innerHTML="";
+                    var count = xhr.responseText;
+                    for(var i =0; i< count; i++) {
+                        let text = document.createTextNode(i);
+                        let span = document.createElement("span");
+                        span.setAttribute("class","pageIndex")
+                        span.innerText = i + 1;
+                        span.style.border = "1px solid grey"
+                        span.style.width = "20px"
+                        span.style.float = "left"
+                        span.style.textAlign = "center"
+                        span.addEventListener('click', function(){
+                            alert(span.innerText);
+                        });
+                        pagesDom.appendChild(span);
+                    }
                 }
             };
             xhr.open('get', './recordCount?path='+ window.databasePath + '&table='+tableName, true);
+            xhr.send();
+        }
+
+        function executeRawSql() {
+            var sqlInput = document.getElementById('sqlInput').value
+            if(sqlInput.trim() == '') {
+                alert("请输入执行语句");
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    if(xhr.responseText == '') {
+                        alert("sql执行成功，请刷新");
+                        queryRecords(document.getElementById('tables').value);
+                    } else {
+                        alert(xhr.responseText);
+                    }
+                }
+            };
+            xhr.open('get', './execute?path=' + window.databasePath + '&sql='+sqlInput, true);
             xhr.send();
         }
 
@@ -99,11 +127,21 @@
 </head>
 <body>
     <div><h1 id="db_home_name">查看数据库信息：</h1></div>
-    </br>
+    <br>
     <div>数据库路径：<span id="file_path"></span></span></div>
-    </br>
+    <br>
+    <div>
+        <textarea id="sqlInput"
+                  style="border: 1px solid #000;width: 90%;margin: 10px"
+                  name="content"
+                  rows="10"
+                  placeholder="请输入想要执行的SQL语句">
+        </textarea>
+    </div>
+    <div><input type="button" onclick="executeRawSql()" value = "执行sql"/></div>
+    <br>
     <div>选择表：<select id="tables"></select></div>
-    </br>
+    <br>
     <table>
         <thead>
             <tr id="columns">

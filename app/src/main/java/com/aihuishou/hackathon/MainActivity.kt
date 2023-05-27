@@ -57,8 +57,8 @@ class MainActivity : ComponentActivity() {
                     Log.i("nbox", System.currentTimeMillis().toString())
                 }
             },
-            100,
-            100
+            1000,
+            1000
         )
 
     }
