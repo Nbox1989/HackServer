@@ -93,8 +93,8 @@
         function addScanResult(){
             let ip = document.getElementById('ipAddress').value;
             let mask = document.getElementById('subnetMask').value;
-            document.cookie = `ipAddress=${ipAddress}`;
-            document.cookie = `subnetMask=${subnetMask}`;
+            document.cookie = `ipAddress=${ip}`;
+            document.cookie = `subnetMask=${mask}`;
             let resultDiv = document.getElementById('result');
             resultDiv.innerHTML = '';
             let ips = generateIPs(ip, mask);
