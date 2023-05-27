@@ -50,6 +50,10 @@ object HackServer {
         }
     }
 
+    fun isServerRunning(): Boolean {
+        return mServer != null && mServer!!.isRunning
+    }
+
     fun shutdownServer() {
         if(mServer != null && mServer!!.isRunning) {
             mServer!!.shutdown()
