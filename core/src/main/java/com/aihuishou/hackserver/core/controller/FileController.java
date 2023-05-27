@@ -55,6 +55,13 @@ public class FileController {
         return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
     }
 
+    @GetMapping(path = "/files/root", produces = MediaType.TEXT_HTML_VALUE)
+    public String getRootFiles() {
+        File filesDir = new File("/");
+        String html = AssetReader.readFromAsset("files.html");
+        return html.replace("[ROOT_FILE_PATH]", filesDir.getAbsolutePath());
+    }
+
     @GetMapping(path = "/files/list")
     public String listFiles(@QueryParam("root") String root, @QueryParam(value = "path", required = false) String path) {
         return new FileListFunc().getFilesString(root, path);

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>查找局域网内的所有可用服务</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3e8e41;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function doScan(ip){
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                console.log(ip + ' ' + xhr.readyState + ' ' + xhr.status);
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    // let a = document.createElement('a');
+                    // a.textContent = ip + ' ' + xhr.responseText;
+                    // a.target = '_blank';
+                    // a.href = 'http://' + ip + ':9999/home';
+                    // let resultDiv = document.getElementById('result');
+                    // resultDiv.appendChild(a);
+                    let li = document.createElement('li');
+                    li.textContent = ip + ' ' + xhr.responseText;
+                    li.addEventListener('click', () => {
+                        window.open('http://' + ip + ':9999/home', '_blank');
+                    });
+                    document.getElementById('result').appendChild(li);
+                }
+            };
+            xhr.timeout = 1000;
+            xhr.open("get", "http://" + ip + ":9999/sniffer", true);
+            xhr.send();
+        }
+        function generateIPs(ipAddress, subnetMask) {
+            let ip = ipAddress.split('.').map(Number);
+            let mask = subnetMask.split('.').map(Number);
+            let start = [], end = [];
+            for (let i = 0; i < 4; i++) {
+                start[i] = ip[i] & mask[i];
+                end[i] = start[i] + ~mask[i] + 256;
+            }
+            let result = [];
+            for (let i = start[0]; i <= end[0]; i++) {
+                for (let j = start[1]; j <= end[1]; j++) {
+                    for (let k = start[2]; k <= end[2]; k++) {
+                        for (let l = start[3]; l <= end[3]; l++) {
+                            if (i === start[0] && j === start[1] && k === start[2] && l === start[3]) continue;
+                            if (i === end[0] && j === end[1] && k === end[2] && l === end[3]) continue;
+                            result.push([i, j, k, l].join('.'));
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        function addScanResult(){
+            let ip = document.getElementById('ipAddress').value;
+            let mask = document.getElementById('subnetMask').value;
+            document.cookie = `ipAddress=${ipAddress}`;
+            document.cookie = `subnetMask=${subnetMask}`;
+            let resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            let ips = generateIPs(ip, mask);
+            ips.forEach(ip => {
+                doScan(ip)
+            });
+        }
+
+        window.onload = function () {
+            let ipAddressInput = document.getElementById('ipAddress');
+            let subnetMaskInput = document.getElementById('subnetMask');
+            let cookies = document.cookie.split('; ');
+            cookies.forEach(cookie => {
+                let [name, value] = cookie.split('=');
+                if (name === 'ipAddress') {
+                    ipAddressInput.value = value;
+                } else if (name === 'subnetMask') {
+                    subnetMaskInput.value = value;
+                }
+            });
+        }
+    </script>
+    <h1>查找局域网内的所有可用服务</h1>
+    <div class="container">
+        <input type="text" id="ipAddress" value="192.168.1.155" placeholder="IP地址">
+        <input type="text" id="subnetMask" value="255.255.1.0" placeholder="子网掩码">
+        <button id="scan", onclick="addScanResult()">查找</button>
+        <ul id="result"></ul>
+    </div>
+</body>
+</html>

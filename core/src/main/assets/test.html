@@ -18,7 +18,23 @@ function myFunction()
 {
     carName = "Volvo";
 }
+    function test(){
+        xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState ==4 && xhr.status == 200) {
+                alert(xhr.responseText);
+            }
+        };
+        var rootPath = document.getElementById('rootPath').innerText;
+        var relativePath = window.currentPath;
+
+        var folder = rootPath + relativePath + "/" + folderName;
+        xhr.open("get", "./create?folder="+ folder, true);
+        xhr.send();
+      }
 </script>
 
+<body>
+    <input type="button" value="上传" onclick="test()"/>
 </body>
 </html>

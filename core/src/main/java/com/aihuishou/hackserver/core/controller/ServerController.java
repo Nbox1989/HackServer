@@ -1,6 +1,7 @@
 package com.aihuishou.hackserver.core.controller;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Environment;
 
 import com.aihuishou.hackserver.core.HackServer;
@@ -82,6 +83,11 @@ public class ServerController {
     @GetMapping(path = "/test", produces = MediaType.TEXT_HTML_VALUE)
     public String getTestPage() {
         return readFromAsset("test.html");
+    }
+
+    @GetMapping(path = "/sniffer")
+    public String serverSniffer() {
+        return Build.BRAND + " " + Build.MODEL +  " Android " + Build.VERSION.RELEASE;
     }
 
     private String readFromAsset(String assetFileName) {
