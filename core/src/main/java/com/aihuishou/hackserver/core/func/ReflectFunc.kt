@@ -129,12 +129,12 @@ private fun MethodParam.toObject(): Any? {
         e.printStackTrace()
     }
     return when  {
-        this.className.endsWith("Int", false) -> this.stringValue.toInt()
-        this.className.endsWith("Long", false) -> this.stringValue.toLong()
-        this.className.endsWith("Double", false) -> this.stringValue.toDouble()
-        this.className.endsWith("Float", false) -> this.stringValue.toFloat()
-        this.className.endsWith("Boolean", false) -> this.stringValue.toBoolean()
-        this.className.endsWith("String", false) -> this.stringValue.toBoolean()
+        this.className.endsWith("Int", true) -> this.stringValue.toInt()
+        this.className.endsWith("Long", true) -> this.stringValue.toLong()
+        this.className.endsWith("Double", true) -> this.stringValue.toDouble()
+        this.className.endsWith("Float", true) -> this.stringValue.toFloat()
+        this.className.endsWith("Boolean", true) -> this.stringValue.toBoolean()
+        this.className.endsWith("String", true) -> this.stringValue.toBoolean()
         else -> null
     }
 }

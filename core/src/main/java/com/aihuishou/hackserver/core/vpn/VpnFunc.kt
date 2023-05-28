@@ -30,8 +30,15 @@ object VpnFunc {
             ActivityUtils.getTopActivity().startActivityForResult(intent, 9999)
             -2
         } else {
-            HackServer.coreApplication!!.startService(Intent(HackServer.coreApplication, MyVpnService::class.java))
-            MyVpnService.createDataFile(HackServer.coreApplication!!)
+            if(!MyVpnService.isStarted) {
+                HackServer.coreApplication!!.startService(
+                    Intent(
+                        HackServer.coreApplication,
+                        MyVpnService::class.java
+                    )
+                )
+                MyVpnService.createDataFile(HackServer.coreApplication!!)
+            }
             0
         }
     }
