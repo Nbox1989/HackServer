@@ -44,11 +44,37 @@
 </head>
 <body>
     <script>
-        function doScan(ip){
+        function addScanResult() {
+            let ip = document.getElementById('ipAddress').value;
+            let mask = document.getElementById('subnetMask').value;
+            document.cookie = `ipAddress=${ip}`;
+            document.cookie = `subnetMask=${mask}`;
+            let resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            let ips = generateIPs(ip, mask);
+            let maxConcurrentRequests = 5;
+            let currentRequests = 0;
+            let ipQueue = ips.slice();
+
+            function processQueue() {
+                while (currentRequests < maxConcurrentRequests && ipQueue.length > 0) {
+                    let ip = ipQueue.shift();
+                    currentRequests++;
+                    doScan(ip, () => {
+                        currentRequests--;
+                        processQueue();
+                    });
+                }
+            }
+
+            processQueue();
+        }
+
+        function doScan(ip, callback) {
             let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function(){
+            xhr.onreadystatechange = function () {
                 console.log(ip + ' ' + xhr.readyState + ' ' + xhr.status);
-                if(xhr.readyState ==4 && xhr.status == 200) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
                     // let a = document.createElement('a');
                     // a.textContent = ip + ' ' + xhr.responseText;
                     // a.target = '_blank';
@@ -62,8 +88,11 @@
                     });
                     document.getElementById('result').appendChild(li);
                 }
+                if (xhr.readyState == 4) {
+                    callback();
+                }
             };
-            xhr.timeout = 1000;
+            xhr.timeout = 500;
             xhr.open("get", "http://" + ip + ":9999/sniffer", true);
             xhr.send();
         }
@@ -90,18 +119,18 @@
             return result;
         }
 
-        function addScanResult(){
-            let ip = document.getElementById('ipAddress').value;
-            let mask = document.getElementById('subnetMask').value;
-            document.cookie = `ipAddress=${ip}`;
-            document.cookie = `subnetMask=${mask}`;
-            let resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-            let ips = generateIPs(ip, mask);
-            ips.forEach(ip => {
-                doScan(ip)
-            });
-        }
+        // function addScanResult(){
+        //     let ip = document.getElementById('ipAddress').value;
+        //     let mask = document.getElementById('subnetMask').value;
+        //     document.cookie = `ipAddress=${ip}`;
+        //     document.cookie = `subnetMask=${mask}`;
+        //     let resultDiv = document.getElementById('result');
+        //     resultDiv.innerHTML = '';
+        //     let ips = generateIPs(ip, mask);
+        //     ips.forEach(ip => {
+        //         doScan(ip)
+        //     });
+        // }
 
         window.onload = function () {
             let ipAddressInput = document.getElementById('ipAddress');

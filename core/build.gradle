@@ -48,8 +48,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
 }
 
-apply plugin: 'maven-publish'
-
 ext {
 
 // 从Github上clone下来的项目的本地地址
@@ -69,10 +67,11 @@ publishing {
         }
     }
     publications {
-        maven(MavenPublication) {
+        aar(MavenPublication) {
             groupId = project.PUBLISH_GROUP_ID
             artifactId = project.PUBLISH_ARTIFACT_ID
             version = project.PUBLISH_VERSION
+            artifact("$buildDir/outputs/aar/core-release.aar")
         }
     }
 }
