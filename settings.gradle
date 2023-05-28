@@ -10,7 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://raw.githubusercontent.com/Nbox1989/HackServer/main" }
+//        maven { url "https://raw.githubusercontent.com/Nbox1989/HackServer/main" }
     }
 }
 rootProject.name = "HackServer"

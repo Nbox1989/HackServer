@@ -2,4 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aihuishou.hackserver.core">
 
+    <application>
+
+        <service android:name="com.aihuishou.hackserver.core.vpn.MyVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+    </application>
 </manifest>

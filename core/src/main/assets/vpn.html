@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>网络抓包</title>
+    <style>
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        #serviceButton.on {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #serviceButton.off {
+            background-color: #f44336;
+            color: white;
+        }
+        #statusDiv {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #statusP {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        #filePathDiv {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #filePathP {
+            color: #2196F3;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        function checkServiceStatus() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = this.responseText;
+                    let serviceButton = document.getElementById('serviceButton');
+                    if (data != 0) {
+                        serviceButton.innerText = '开启服务';
+                        serviceButton.onclick = turnOnService;
+                        serviceButton.classList.add('off');
+                    } else {
+                        serviceButton.innerText = '关闭服务';
+                        serviceButton.onclick = turnOffService;
+                        serviceButton.classList.add('on');
+                        queryPackageDataFilePath();
+                    }
+                }
+            };
+            xhr.open('GET', './vpn/status', true);
+            xhr.send();
+        }
+        function turnOnService() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let serviceButton = document.getElementById('serviceButton');
+                    let statusTxt = document.getElementById('statusP');
+                    var data = this.responseText;
+                    if(data == -1) {
+                        statusTxt.textContent = '应用未正常初始化！';
+                    } else if(data == -2) {
+                        statusTxt.textContent = '请在手机上授权启动vpn，然后再次点击启动服务按钮';
+                    } else if(data == 0) {
+                        serviceButton.innerText = '关闭服务';
+                        serviceButton.onclick = turnOffService;
+                        serviceButton.classList.remove('on');
+                        serviceButton.classList.add('off');
+                        statusTxt.innerText = '服务已启动';
+                        queryPackageDataFilePath();
+                    }
+                }
+            };
+            xhr.open('GET', './vpn/on', true);
+            xhr.send();
+        }
+        function turnOffService() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let serviceButton = document.getElementById('serviceButton');
+                    serviceButton.innerText = '开启服务';
+                    serviceButton.onclick = turnOnService;
+                    serviceButton.classList.remove('off');
+                    serviceButton.classList.add('on');
+                }
+            };
+            xhr.open('GET', './vpn/off', true);
+            xhr.send();
+        }
+        function queryPackageDataFilePath(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let filePathDiv = document.getElementById('filePathDiv');
+                    filePathDiv.innerHTML = this.responseText;
+                }
+            };
+            xhr.open('GET', './vpn/file', true);
+            xhr.send();
+        }
+    </script>
+</head>
+<body onload="checkServiceStatus()">
+<h1>网络抓包</h1>
+<button id="serviceButton">Loading...</button>
+<div id="statusDiv">
+    <p id="statusP"></p>
+</div>
+<div id="filePathDiv">
+</div>
+</body>
+</html>
