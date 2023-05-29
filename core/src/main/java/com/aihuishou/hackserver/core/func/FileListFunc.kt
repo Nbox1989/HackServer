@@ -88,7 +88,11 @@ class FileListFunc {
     fun installApkFile(apkFilePath: File): Int {
         return if(HackServer.coreApplication != null) {
             val intent = Intent(Intent.ACTION_VIEW)
-            val apkUri = FileProvider.getUriForFile(HackServer.coreApplication!!, "com.nbox.hackserver.provider", apkFilePath)
+            val apkUri = FileProvider.getUriForFile(
+                HackServer.coreApplication!!,
+                HackServer.coreApplication!!.packageName + ".hackserver.provider",
+                apkFilePath
+            )
             intent.setDataAndType(
                 apkUri,
                 "application/vnd.android.package-archive"

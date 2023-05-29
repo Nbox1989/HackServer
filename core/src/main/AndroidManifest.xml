@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.aihuishou.hackserver.core">
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
@@ -15,13 +16,15 @@
         </service>
 
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.nbox.hackserver.provider"
+            android:name="com.aihuishou.hackserver.core.provider.HackServerProvider"
+            android:authorities="${applicationId}.hackserver.provider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/hack_file_path" />
+                android:resource="@xml/file_paths" />
         </provider>
+
     </application>
 </manifest>
