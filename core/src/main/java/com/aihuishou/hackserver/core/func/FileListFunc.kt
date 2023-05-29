@@ -1,5 +1,9 @@
 package com.aihuishou.hackserver.core.func
 
+import android.content.Intent
+import android.net.Uri
+import androidx.core.content.FileProvider
+import com.aihuishou.hackserver.core.HackServer
 import com.blankj.utilcode.util.ConvertUtils
 import java.io.File
 import java.text.SimpleDateFormat
@@ -56,8 +60,12 @@ class FileListFunc {
         val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
             .format(Date(file.lastModified()))
         val txtFile = file.isTextFile()
+        val apkFile = file.isApkFile()
+        val dbFile = file.isDatabaseFile()
         return "<div>$icon <b>$name</b> <span style=\"color:blue\">$size</span> <span style=\"color:grey\">$time</span>  <a target=\"blank\" href=\"${createDownloadRef(file)}\">下载</a>" +
                 if(txtFile) "  <a target=\"blank\" href=\"${createViewRef(file)}\">查看</a>" else "" +
+                if(apkFile) "  <a target=\"blank\" href=\"${createInstallRef(file)}\">安装</a>" else "" +
+                if(dbFile) "  <a target=\"blank\" href=\"${createDbManageRef(file)}\">管理</a>" else "" +
                 "</div>"
     }
 
@@ -67,6 +75,31 @@ class FileListFunc {
 
     private fun createViewRef(file: File): String{
         return "./view?filePath=${file.absolutePath}"
+    }
+
+    private fun createInstallRef(file: File): String{
+        return "./install?filePath=${file.absolutePath}"
+    }
+
+    private fun createDbManageRef(file: File): String {
+        return "../database/view?path=${file.absolutePath}"
+    }
+
+    fun installApkFile(apkFilePath: File): Int {
+        return if(HackServer.coreApplication != null) {
+            val intent = Intent(Intent.ACTION_VIEW)
+            val apkUri = FileProvider.getUriForFile(HackServer.coreApplication!!, "com.nbox.hackserver.provider", apkFilePath)
+            intent.setDataAndType(
+                apkUri,
+                "application/vnd.android.package-archive"
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            HackServer.coreApplication!!.startActivity(intent)
+            0
+        } else {
+            -1
+        }
     }
 }
 
@@ -83,4 +116,12 @@ private fun File.isTextFile(): Boolean {
         this.name.endsWith("yml") ||
         this.name.endsWith("yaml") ||
         this.name.endsWith("sh")
+}
+
+private fun File.isApkFile(): Boolean {
+    return this.name.endsWith("apk")
+}
+
+private fun File.isDatabaseFile(): Boolean {
+    return this.name.endsWith("db")
 }

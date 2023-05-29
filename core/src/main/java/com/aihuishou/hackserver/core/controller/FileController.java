@@ -79,8 +79,12 @@ public class FileController {
     public String viewFile(HttpResponse response, @QueryParam(name = "filePath") String filePath){
         File file = new File(filePath);
         return "<html><body><pre>" + InputReader.readFormFile(file) + "</pre></body></html>";
+    }
 
-
+    @GetMapping(path = "/files/install")
+    public Integer installFile(@QueryParam(name = "filePath") String filePath){
+        File file = new File(filePath);
+        return new FileListFunc().installApkFile(file);
     }
 
     @PostMapping(path = "/files/upload")
