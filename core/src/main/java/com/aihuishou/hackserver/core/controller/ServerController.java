@@ -1,6 +1,8 @@
 package com.aihuishou.hackserver.core.controller;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 
@@ -87,7 +89,18 @@ public class ServerController {
 
     @GetMapping(path = "/sniffer")
     public String serverSniffer() {
-        return Build.BRAND + " " + Build.MODEL +  " Android " + Build.VERSION.RELEASE;
+        String applicationName = "";
+        if(HackServer.coreApplication != null) {
+            PackageManager packageManager = null;
+            ApplicationInfo applicationInfo = null;
+            try {
+                packageManager = HackServer.coreApplication.getPackageManager();
+                applicationInfo = packageManager.getApplicationInfo(HackServer.coreApplication.getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+            applicationName = (String) packageManager.getApplicationLabel(applicationInfo);
+        }
+        return Build.BRAND + " " + Build.MODEL +  " Android " + Build.VERSION.RELEASE + " " + applicationName;
     }
 
     private String readFromAsset(String assetFileName) {
