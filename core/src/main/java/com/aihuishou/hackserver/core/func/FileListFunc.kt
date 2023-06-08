@@ -62,10 +62,14 @@ class FileListFunc {
         val txtFile = file.isTextFile()
         val apkFile = file.isApkFile()
         val dbFile = file.isDatabaseFile()
+        val imgFile = file.isImage()
+        val videoFile = file.isVideo()
         return "<div>$icon <b>$name</b> <span style=\"color:blue\">$size</span> <span style=\"color:grey\">$time</span>  <a target=\"blank\" href=\"${createDownloadRef(file)}\">下载</a>" +
                 if(txtFile) "  <a target=\"blank\" href=\"${createViewRef(file)}\">查看</a>" else "" +
                 if(apkFile) "  <a target=\"blank\" href=\"${createInstallRef(file)}\">安装</a>" else "" +
                 if(dbFile) "  <a target=\"blank\" href=\"${createDbManageRef(file)}\">管理</a>" else "" +
+                if(imgFile) "  <a target=\"blank\" href=\"${createImageViewRef(file)}\">查看</a>" else "" +
+                if(videoFile) "  <a target=\"blank\" href=\"${createVideoViewRef(file)}\">查看</a>" else "" +
                 "</div>"
     }
 
@@ -83,6 +87,14 @@ class FileListFunc {
 
     private fun createDbManageRef(file: File): String {
         return "../database/view?path=${file.absolutePath}"
+    }
+
+    private fun createImageViewRef(file: File): String {
+        return "../media?filePath=${file.absolutePath}"
+    }
+
+    private fun createVideoViewRef(file: File): String {
+        return "../media?filePath=${file.absolutePath}"
     }
 
     fun installApkFile(apkFilePath: File): Int {
@@ -128,4 +140,18 @@ private fun File.isApkFile(): Boolean {
 
 private fun File.isDatabaseFile(): Boolean {
     return this.name.endsWith("db")
+}
+
+private fun File.isImage(): Boolean{
+    return this.name.endsWith(".jpg") ||
+            this.name.endsWith(".jpeg") ||
+            this.name.endsWith(".png") ||
+            this.name.endsWith(".bmp")
+}
+
+private fun File.isVideo(): Boolean{
+    return this.name.endsWith(".mp4") ||
+            this.name.endsWith(".3gp") ||
+            this.name.endsWith(".mov") ||
+            this.name.endsWith(".wmv")
 }

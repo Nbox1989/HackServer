@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图片和视频示例</title>
+</head>
+<body>
+<h1>图片示例</h1>
+<img id="myImg" alt="图片描述">
+<h1>视频示例</h1>
+<video id="myVideo" width="320" height="240" controls>
+    您的浏览器不支持 video 标签。
+</video>
+
+<script>
+      // 获取URL参数
+      function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+          var pair = vars[i].split("=");
+          if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+      }
+
+      // 获取filepath参数
+      var filepath = getQueryVariable("filepath");
+
+      // 设置图片和视频的src属性
+<!--      document.getElementById("myImg").src = "./media/image?filePath=" + filepath;-->
+      document.getElementById("myImg").src = "./media/image?filePath=/storage/emulated/0/DCIM/Camera/IMG_20201217_105736.jpg"
+
+    </script>
+</body>
+</html>
