@@ -2,9 +2,8 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'com.yanzhenjie.andserver'
-    id 'maven-publish'
+    id 'org.jetbrains.dokka'
 }
-apply from: "../uploadArchieves.gradle"
 android {
     compileSdk 32
 
@@ -49,15 +48,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.16'
 }
 
-publishing {
-    publications {
-        uploadSDK(MavenPublication) {
-            artifact "build/outputs/aar/core-release.aar"
-            groupId "com.nbox"
-            artifactId "hackserver"
-            version "1.0.0"
-        }
-    }
-}
 
+ext {
+    PUBLISH_NAME = 'hackserver'
+}
+apply from: '../publish.gradle'
 
