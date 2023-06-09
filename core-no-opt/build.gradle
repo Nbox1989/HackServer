@@ -2,8 +2,8 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'maven-publish'
+    id 'org.jetbrains.dokka'
 }
-apply from: "../uploadArchieves.gradle"
 android {
     compileSdk 32
 
@@ -40,13 +40,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
-publishing {
-    publications {
-        uploadSDK(MavenPublication) {
-            artifact "build/outputs/aar/core-no-opt-release.aar"
-            groupId "com.nbox"
-            artifactId "hackserver-no-opt"
-            version "1.0.0"
-        }
-    }
+ext {
+    PUBLISH_NAME = 'hackserver'
 }
+apply from: '../publish.gradle'

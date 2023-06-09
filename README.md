@@ -7,28 +7,42 @@ And of course, database management is also implemented. If you want to take a lo
 
 More functions are coming!
 
-# How to use
+# Integretion and usage
+
+0. integret
+
+The sdk is published to maven central repository. You can simply add this sentence into your android module's build.gradle file:
+
+`implementation 'io.github.nbox1989:hackserver:1.0.0'`
+
+Besides, the no-opt version is also published. For some case we donot want to provide such functions in our release version of application, we can make changes like this:
+
+```
+debugImplementation 'io.github.nbox1989:hackserver:1.0.0' 
+releaseImplementation 'io.github.nbox1989:hackserver-no-opt:1.0.0'
+```
+
 1. initialize
 
-call this method to initialize sdk
+In your application code, call this method to initialize sdk.
 
 `HackServer.init(Application)`
 
 2. start server
 
-call this method to startup an http server listening on port 9999
+Call this method to startup an http server which will listen on port 9999.
 
 `HackServer.startServer(Context)`
 
 3. shutdown server
 
-call this method to shutdown server
+Call this method to shutdown server.
 
 `HackServer.shutdownServer()`
 
 4. view server
 
-When the http server is started, visit "http://[ip]:9999" on a browser within the same local area network as your Android device. Note: replace 'ip' with the local area network IP address of your phone.
+When the http server is started, **visit "http://[ip]:9999" on a browser within the same local area network as your Android device**. Note: replace 'ip' with the local area network IP address of your phone.
 
 # Functions developed
 
@@ -40,6 +54,3 @@ When the http server is started, visit "http://[ip]:9999" on a browser within th
 6. Code Execution (By Reflection)
 7. Http Package Capture (By VpnService). **(in progress)**
 
-# How to integret
-
-to be continued...

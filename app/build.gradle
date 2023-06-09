@@ -67,7 +67,8 @@ dependencies {
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation 'com.blankj:utilcodex:1.31.1'
 
-    implementation project(":core")
+//    implementation project(":core")
 //    implementation project(":core-no-opt")
-//    implementation 'com.nbox:hackserver:1.0.0'
+    debugImplementation 'io.github.nbox1989:hackserver:1.0.0'
+    releaseImplementation 'io.github.nbox1989:hackserver-no-opt:1.0.0'
 }
