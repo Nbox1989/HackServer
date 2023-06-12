@@ -90,11 +90,11 @@ class FileListFunc {
     }
 
     private fun createImageViewRef(file: File): String {
-        return "../media?filePath=${file.absolutePath}"
+        return "../media/home/image?filePath=${file.absolutePath}"
     }
 
     private fun createVideoViewRef(file: File): String {
-        return "../media?filePath=${file.absolutePath}"
+        return "../media/home/video?filePath=${file.absolutePath}"
     }
 
     fun installApkFile(apkFilePath: File): Int {

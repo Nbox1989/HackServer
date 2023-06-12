@@ -14,8 +14,13 @@ import java.io.File;
 @RestController
 public class MediaController {
 
-    @GetMapping(path = "/media/", produces = MediaType.TEXT_HTML_VALUE)
-    public String getMediaPage() {
+    @GetMapping(path = "/media/home/image", produces = MediaType.TEXT_HTML_VALUE)
+    public String getMediaImagePage() {
+        return AssetReader.readFromAsset("view_image.html");
+    }
+
+    @GetMapping(path = "/media/home/video", produces = MediaType.TEXT_HTML_VALUE)
+    public String getMediaVideoPage() {
         return AssetReader.readFromAsset("view_video.html");
     }
 

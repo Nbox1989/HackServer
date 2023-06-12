@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         isEnabledLiveData.value = NotificationUtil.isNotifyEnabled(this)
         if(!resumeFlag) {
-            val intent = Intent(this, ScreenRecordActivity::class.java)
+            val intent = Intent(this, ServerActivity::class.java)
             startActivity(intent)
             resumeFlag = true
         }
