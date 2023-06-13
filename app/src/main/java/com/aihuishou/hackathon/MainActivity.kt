@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import com.aihuishou.hackathon.ui.theme.HackServerTheme
 import com.aihuishou.hackathon.util.NotificationUtil
+import com.aihuishou.hackserver.core.screen.shot.ScreenShotActivity
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         isEnabledLiveData.value = NotificationUtil.isNotifyEnabled(this)
         if(!resumeFlag) {
-            val intent = Intent(this, ServerActivity::class.java)
+            val intent = Intent(this, ScreenShotActivity::class.java)
             startActivity(intent)
             resumeFlag = true
         }

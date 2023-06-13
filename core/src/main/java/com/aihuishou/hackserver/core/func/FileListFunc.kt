@@ -59,18 +59,21 @@ class FileListFunc {
         val size = ConvertUtils.byte2FitMemorySize(file.length(), 1)
         val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
             .format(Date(file.lastModified()))
-        val txtFile = file.isTextFile()
-        val apkFile = file.isApkFile()
-        val dbFile = file.isDatabaseFile()
-        val imgFile = file.isImage()
-        val videoFile = file.isVideo()
-        return "<div>$icon <b>$name</b> <span style=\"color:blue\">$size</span> <span style=\"color:grey\">$time</span>  <a target=\"blank\" href=\"${createDownloadRef(file)}\">下载</a>" +
-                if(txtFile) "  <a target=\"blank\" href=\"${createViewRef(file)}\">查看</a>" else "" +
-                if(apkFile) "  <a target=\"blank\" href=\"${createInstallRef(file)}\">安装</a>" else "" +
-                if(dbFile) "  <a target=\"blank\" href=\"${createDbManageRef(file)}\">管理</a>" else "" +
-                if(imgFile) "  <a target=\"blank\" href=\"${createImageViewRef(file)}\">查看</a>" else "" +
-                if(videoFile) "  <a target=\"blank\" href=\"${createVideoViewRef(file)}\">查看</a>" else "" +
-                "</div>"
+
+        val divBuilder = StringBuilder()
+        divBuilder.append("<div>$icon <b>$name</b> <span style=\"color:blue\">$size</span> <span style=\"color:grey\">$time</span>  ")
+        divBuilder.append("<a target=\"blank\" href=\"${createDownloadRef(file)}\">下载</a>")
+
+        if(file.isTextFile()) divBuilder.append("  <a target=\"blank\" href=\"${createViewRef(file)}\">查看</a>")
+        if(file.isApkFile()) divBuilder.append("  <a target=\"blank\" href=\"${createInstallRef(file)}\">安装</a>")
+        if(file.isDatabaseFile()) divBuilder.append("  <a target=\"blank\" href=\"${createDbManageRef(file)}\">管理</a>")
+        if(file.isImage()) divBuilder.append("  <a target=\"blank\" href=\"${createImageViewRef(file)}\">查看</a>")
+        if(file.isVideo()) divBuilder.append("  <a target=\"blank\" href=\"${createVideoViewRef(file)}\">查看</a>")
+
+        divBuilder.append("  <p style=\"color:red; display: inline;\" onclick=\"confirmDelete('${file.name}')\">删除</a>")
+        divBuilder.append("</div>")
+
+        return divBuilder.toString()
     }
 
     private fun createDownloadRef(file: File): String{

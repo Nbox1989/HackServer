@@ -105,4 +105,13 @@ public class FileController {
         return result?"创建成功":"创建失败";
     }
 
+    @GetMapping(path = "/files/delete")
+    public String deleteFile(@QueryParam("path") String path) {
+        File f = new File(path);
+        if(f.exists()) {
+            return f.delete()?"删除成功":"删除失败";
+        } else {
+            return "文件不存在";
+        }
+    }
 }

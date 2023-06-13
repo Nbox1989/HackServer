@@ -15,6 +15,7 @@
             color: blue;
             font-style:bold;
         }
+
     </style>
     <script>
       function listFiles(path){
@@ -102,25 +103,49 @@
         xhr.open("get", "./create?folder="+ folder, true);
         xhr.send();
       }
+
+      function confirmDelete(fileName) {
+          if (confirm('确认删除'+fileName+'吗？')) {
+            deleteFile(fileName);
+          }
+        }
+
+       function deleteFile(fileName){
+            xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState ==4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                    listFiles(window.currentPath)
+                }
+            };
+            var rootPath = document.getElementById('rootPath').innerText;
+            var relativePath = window.currentPath;
+
+            var path = rootPath + relativePath + "/" + fileName;
+            xhr.open("get", "./delete?path="+path, true);
+            xhr.send();
+      }
+
     </script>
 
     <script type='text/javascript'>
         window.onload = function () {
             listFiles('');
         }
+
     </script>
 </head>
 <body>
-    <div><h1 onclick="listFiles('')"> 根目录位置：<span id="rootPath">[ROOT_FILE_PATH]</span></h1></div>
-    <div><h2>相对路径：<span id="relativePath"></span></h2></div>
-    </br>
-    <input type="file" id="f1"/>
-    <input type="button" value="上传" onclick="uploadFile()"/>
-    </br>
-    </br>
-    <div><input type="text" id="folder"/>
-        <input type="button" value="创建文件夹" onclick="createFolder()"/></div>
-    </br>
-    <div id="fileList"></div>
+<div><h1 onclick="listFiles('')"> 根目录位置：<span id="rootPath">[ROOT_FILE_PATH]</span></h1></div>
+<div><h2>相对路径：<span id="relativePath"></span></h2></div>
+</br>
+<input type="file" id="f1"/>
+<input type="button" value="上传" onclick="uploadFile()"/>
+</br>
+</br>
+<div><input type="text" id="folder"/>
+    <input type="button" value="创建文件夹" onclick="createFolder()"/></div>
+</br>
+<div id="fileList"></div>
 </body>
 </html>
