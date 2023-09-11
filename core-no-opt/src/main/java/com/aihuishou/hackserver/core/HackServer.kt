@@ -1,19 +1,14 @@
 package com.aihuishou.hackserver.core
 
 import android.app.Application
-import android.content.Context
+import com.aihuishou.hackathon.IHackServer
 
-object HackServer {
+object HackServer: IHackServer {
+    override fun init(application: Application) = Unit
 
-    @JvmStatic
-    fun init(application: Application) {
-    }
+    override fun startServer() = Unit
 
-    fun startServer(context: Context) {
+    override fun shutdownServer() = Unit
 
-    }
-
-    fun shutdownServer() {
-
-    }
+    override fun isRunning(): Boolean = false
 }

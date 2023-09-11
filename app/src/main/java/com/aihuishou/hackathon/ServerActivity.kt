@@ -21,7 +21,7 @@ class ServerActivity: ComponentActivity() {
     }
 
     private fun initServer() {
-        HackServer.startServer(this)
+        HackServer.startServer()
     }
 
 

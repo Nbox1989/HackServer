@@ -1,32 +1,33 @@
 package com.aihuishou.hackserver.core
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
+import com.aihuishou.hackathon.IHackServer
 import com.aihuishou.hackserver.core.utils.NetUtil
 import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.andserver.AndServer
 import com.yanzhenjie.andserver.Server
 import java.util.concurrent.TimeUnit
 
-object HackServer {
+object HackServer: IHackServer {
 
     @JvmField
     var coreApplication: Application? = null
 
     private var mServer: Server? = null
 
-    @JvmStatic
-    fun init(application: Application) {
+    override fun init(application: Application) {
         coreApplication = application
     }
 
-    fun startServer(context: Context) {
-        if(mServer != null) {
+    override fun startServer() {
+        if(coreApplication == null) {
+            ToastUtils.showShort("未初始化")
+        } else if(isRunning()) {
             ToastUtils.showShort("服务已启动")
         } else {
             val ipAddress = NetUtil.getLocalIPAddress().toString()
-            mServer = AndServer.webServer(context)
+            mServer = AndServer.webServer(coreApplication!!)
                 .port(9999)
                 .timeout(10, TimeUnit.SECONDS)
                 .listener(object : Server.ServerListener {
@@ -50,13 +51,14 @@ object HackServer {
         }
     }
 
-    fun isServerRunning(): Boolean {
-        return mServer != null && mServer!!.isRunning
+    override fun shutdownServer() {
+        if(isRunning()) {
+            mServer?.shutdown()
+        }
+        mServer = null
     }
 
-    fun shutdownServer() {
-        if(mServer != null && mServer!!.isRunning) {
-            mServer!!.shutdown()
-        }
+    override fun isRunning(): Boolean {
+        return mServer?.isRunning == true
     }
 }
